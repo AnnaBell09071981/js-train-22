@@ -15,7 +15,7 @@ class Customer {
    * Метод відправки повідомлення клієнту по електронній пошті.Приймає message - повідомлення,та виводить в консоль ${this.email} ${message}.
    */
   sendEmail(message) {
-    console.log(`${this.email} ${message}`);
+    console.log(`Відправки на email ${this.email} повідомлення: ${message}`);
   }
 }
 
@@ -56,11 +56,11 @@ class Store {
   }
   createProduct(name) {
     const product = new Product(name);
-    this.sendNotify(product);
+    this.sendNotify(product)
   }
-  sendEmail(product) {
-    this.customers.forEach((subscribe) => {
-      subscribe.sendEmail(
+  sendNotify(product) {
+    this.customers.forEach((customer) => {
+      customer.sendEmail(
         `Новий продукт "${product.name}" в магазині ${this.name}!`
       );
     });

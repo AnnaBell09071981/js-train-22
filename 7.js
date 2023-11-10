@@ -7,7 +7,8 @@ class Participant {
     this.communicator = communicator;
   }
   dispatchMessage(text) {
-    return text;
+    const preparedMessage = this.prepareMessage(text);
+    this.communicator.transmit(preparedMessage);
   }
   prepareMessage(text) {
     return `[${this.alias}]: ${text}`;
@@ -20,8 +21,8 @@ class Participant {
 
 // Клас SMSCommunicator відповідає за відправку повідомлень через SMS.
 class SMSCommunicator {
- static transmit(message) {
-  console.log(`Відправлено SMS: ${message}`);
+ static transmit(text) {
+  console.log(`Відправлено SMS: ${text}`);
 
  }
   // Статичний метод transmit відправляє SMS.
@@ -30,8 +31,8 @@ class SMSCommunicator {
 
 // Клас EmailCommunicator відповідає за відправку повідомлень через Email.
 class EmailCommunicator {
-  static transmit(Email) {
-    console.log(`Відправлено Email: ${message}`);
+  static transmit(text) {
+    console.log(`Відправлено Email: ${text}`);
   }
   // Статичний метод transmit відправляє Email.
   // Він приймає один параметр - message - текст повідомлення, яке потрібно відправити та виводимо в консоль `Відправлено Email: ${message}`.

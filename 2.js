@@ -51,7 +51,7 @@ class AudioBook {
  */
 
 class ProductFactory {
-  static #TYPE = {
+  static TYPE = {
     BOOK: "book",
     AUDIOBOOK: "audiobook",
   }
@@ -70,11 +70,11 @@ class ProductFactory {
    *  Кидає помилку, якщо переданий тип не підтримується `Такого типу продукту не існує: ${type}`.
    */
   static createProduct(type, options) {
-    if(options.AudioBook) {
+    if(options.audioLength) {
       return new AudioBook(options);
     }
 
-    if(options.Book) {
+    if(options.coverColor) {
       return new Book(options);
     }
     throw new Error(`Такого типу продукту не існує: ${type}`);

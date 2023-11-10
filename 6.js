@@ -4,6 +4,7 @@
 class AuthProcessor {
   setNextProcessor(processor) {
     this.nextProcessor = processor;
+    return processor;
   }
   validate(username, passkey) {
     if(this.nextProcessor) {
@@ -24,12 +25,15 @@ class AuthProcessor {
 // TwoStepProcessor Клас обробника, який перевіряє двофакторний код. Наслідує базовий клас AuthProcessor.
 class TwoStepProcessor extends AuthProcessor {
   validate(username, passkey) {
-      if(username === "john" || passkey === "password" || isValidTwoStepCode(username, passkey) === true) {
+      if(username === "john" && passkey === "password" && this.isValidTwoStepCode()) {
         console.log("Вхід дозволено з двофакторною аутентифікацією");
         return true;
       } else {
-        return super.validate(username, passkey), isValidTwoStepCode(username, passkey);
+        return super.validate(username, passkey);
       }
+  }
+  isValidTwoStepCode() {
+    return true;
   }
   // Метод для перевірки аутентифікації validate. Перевіряє ім'я користувача (username), пароль (passkey) і викликаємо метод isValidTwoStepCode().
   // Якщо username дорівнює "john", passkey дорівнює "password" та метод isValidTwoStepCode() повертає true, аутентифікація успішна.
@@ -38,14 +42,15 @@ class TwoStepProcessor extends AuthProcessor {
   // isValidTwoStepCode Метод для перевірки двофакторного коду,який повертає true.
 }
 
+
 // RoleProcessor Клас обробника, який перевіряє ролі користувача. Наслідує базовий клас AuthProcessor.
 class RoleProcessor extends AuthProcessor {
-  validate(role) {
-    if(role === "guest") {
+  validate(username, passkey) {
+    if(username === "guest") {
       console.log("Вхід дозволено з роллю гостя");
       return true;
     } else {
-      super.validate(role);
+      return super.validate(username, passkey);
     }
   }
   // validate Метод для перевірки аутентифікації. Перевіряє роль користувача.
@@ -57,11 +62,11 @@ class RoleProcessor extends AuthProcessor {
 // CredentialsProcessor Клас обробника, який перевіряє облікові дані користувача. Наслідує базовий клас AuthProcessor.
 class CredentialsProcessor extends AuthProcessor {
   validate(username, passkey) {
-    if(username === "admin" || passkey === "admin123") {
+    if(username === "admin" && passkey === "admin123") {
       console.log("Вхід дозволено за обліковими даними");
       return true;
     } else {
-        super.validate(username, passkey);
+        return super.validate(username, passkey);
     }
   }
   //validate Метод для перевірки аутентифікації. Перевіряє облікові дані користувача.
@@ -76,13 +81,15 @@ class ProcessorBuilder {
     this.firstProcessor = null;
     this.lastProcessor = null;
   }
-  add() {
+  add(processor) {
     if(!this.firstProcessor) {
-      this.lastProcessor = this.firstProcessor;
+      this.firstProcessor = processor;
+      this.lastProcessor = processor;
     } else {
-      this.lastProcessor = this.lastProcessor;
-      return this;
+      this.lastProcessor.setNextProcessor(processor);
+      this.lastProcessor = processor;
     } 
+    return this;
   }
   create() {
     return this.firstProcessor;
