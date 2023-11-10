@@ -4,14 +4,14 @@
 // Клас OrderTracker відповідає за відстеження замовлень
 class OrderTracker {
   static #instance = null;
-  constructor() {
-  this.orders = [];
-  }
+  static #orders = [];
   // Приватне статичне instance поле для збереження єдиного екземпляра класу початкове значення null
   // Приватне статичне orders поле для збереження списку замовлень початкове значення []
   /**
    * Статичний метод create використовується для створення єдиного екземпляра класу
-   */static create() {
+   */
+    
+    static create() {
     if(!this.#instance) {
       this.#instance = new OrderTracker();
     }
@@ -23,13 +23,17 @@ class OrderTracker {
   /**
    * Статичний метод add використовується для додавання замовлення до списку
    * Отримує item та додає його до масиву замовлень
-   */static add(item) {
-    this.orders.push(item);
+   */
+
+    static add(item) {
+    this.#orders.push(item);
    }
   /**
    * Статичний метод get використовується для отримання списку замовлень
-   */ get add() {
-    return this.add;
+   */ 
+
+    static get() {
+    return this.#orders;
    }
 }
 console.log("Завдання 1 ====================================");
